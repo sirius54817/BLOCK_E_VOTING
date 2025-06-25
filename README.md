@@ -253,14 +253,4 @@ $ curl -X GET http://localhost:8001/chain
 $ curl -X GET http://localhost:8002/chain
 ```
 
-## References
-1. https://aircconline.com/ijnsa/V9N3/9317ijnsa01.pdf
-2. https://www.geeksforgeeks.org/decentralized-voting-system-using-blockchain/
-3. https://www.javatpoint.com/blockchain-proof-of-work
-4. https://github.com/satwikkansal/python_blockchain_app/tree/ibm_blockchain_post
-5. https://www.ibm.com/topics/what-is-blockchain
-6. https://en.wikipedia.org/wiki/Blockchain
-7. https://github.com/Abhiramborige/Online-Voting-Using-Blockchain
-
-# BLOCK_E_VOTING
 # BLOCK_E_VOTING
