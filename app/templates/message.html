@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="blockchain-bg">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-white" 
+                     style="background: linear-gradient(45deg, {% if success %}#00b894, #00cec9{% else %}#e17055, #d63031{% endif %});">
+                    <h4 class="mb-0">
+                        <i class="fas {% if success %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %} me-2"></i>
+                        {{ title }}
+                    </h4>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="display-1 mb-4 {% if success %}text-success{% else %}text-danger{% endif %}">
+                        <i class="fas {% if success %}fa-check-circle{% else %}fa-exclamation-triangle{% endif %}"></i>
+                    </div>
+                    <h3 class="mb-4">{{ message }}</h3>
+                    {% if details %}
+                    <p class="text-muted mb-4">{{ details }}</p>
+                    {% endif %}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="/" class="btn btn-lg px-4 gap-3 {% if success %}btn-success{% else %}btn-secondary{% endif %}">
+                            <i class="fas fa-home me-2"></i>
+                            Back to Home
+                        </a>
+                        {% if success %}
+                        <a href="/chain" class="btn btn-lg btn-primary px-4">
+                            <i class="fas fa-link me-2"></i>
+                            View Blockchain
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.text-success {
+    color: #00b894 !important;
+}
+
+.text-danger {
+    color: #e17055 !important;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #00b894, #00cec9);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+}
+
+.btn-success:hover {
+    background: linear-gradient(45deg, #00cec9, #00b894);
+    box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+}
+
+.card {
+    border: 1px solid var(--border-color);
+}
+</style>
+{% endblock %}

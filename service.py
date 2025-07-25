@@ -2,7 +2,7 @@ from hashlib import sha256
 import json
 import time
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 import requests
 
 
@@ -169,11 +169,29 @@ def new_transaction():
 @app.route('/chain', methods=['GET'])
 def get_chain():
     chain_data = []
+    total_transactions = 0
     for block in blockchain.chain:
         chain_data.append(block.__dict__)
-    return json.dumps({"length": len(chain_data),
-                       "chain": chain_data,
-                       "peers": list(peers)})
+        total_transactions += len(block.transactions)
+    
+    if request.headers.get('Content-Type') == 'application/json':
+        return json.dumps({
+            "length": len(chain_data),
+            "chain": chain_data,
+            "peers": list(peers)
+        })
+    
+    from datetime import datetime
+    def timestamp_filter(timestamp):
+        return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    
+    app.jinja_env.filters['timestamp'] = timestamp_filter
+    
+    return render_template('chain.html',
+                         chain=chain_data,
+                         length=len(chain_data),
+                         peers=list(peers),
+                         total_transactions=total_transactions)
 
 
 # endpoint to request the node to mine the unconfirmed
@@ -183,7 +201,11 @@ def get_chain():
 def mine_unconfirmed_transactions():
     result = blockchain.mine()
     if not result:
-        return "No transactions to mine"
+        return render_template('message.html',
+                            success=False,
+                            title="Mining Failed",
+                            message="No transactions to mine",
+                            details="There are no pending transactions to be mined into a block.")
     else:
         # Making sure we have the longest chain before announcing to the network
         chain_length = len(blockchain.chain)
@@ -191,7 +213,11 @@ def mine_unconfirmed_transactions():
         if chain_length == len(blockchain.chain):
             # announce the recently mined block to the network
             announce_new_block(blockchain.last_block)
-        return "Block #{} is mined.".format(blockchain.last_block.index)
+        return render_template('message.html',
+                            success=True,
+                            title="Block Mined Successfully",
+                            message=f"Block #{blockchain.last_block.index} has been mined!",
+                            details=f"The block contains {len(blockchain.last_block.transactions)} transactions.")
 
 
 # endpoint to add new peers to the network.
